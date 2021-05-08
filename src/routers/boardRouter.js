@@ -5,16 +5,19 @@ import {
   createController,
   editController,
   createBoardController,
+  deleteBoardController,
+  editBoardController,
 } from "../controllers/boardController";
 
 const boardRouter = express.Router();
 
 boardRouter.get("/", homeController);
 boardRouter.get("/detail", detailController);
-
 boardRouter.get("/create", createController);
-boardRouter.post("/createBoard", createBoardController);
-
 boardRouter.get("/edit", editController);
+
+boardRouter.post("/deleteBoard", deleteBoardController);
+boardRouter.post("/createBoard", createBoardController);
+boardRouter.post("/editBoard", editBoardController);
 
 export default boardRouter;

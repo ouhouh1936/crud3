@@ -1,31 +1,38 @@
 import Board from "../models/Board";
+import dotenv from "dotenv";
+dotenv.config();
 
 export const homeController = async (req, res) => {
   try {
     const result = await Board.find().sort({ created: -1 });
 
-    res.render("home", { boardList: result });
-  } catch (e) {
-    console.log(e);
-    res.render("home", { boardList: [] });
+    res.render("home", { BoardList: result });
+  } catch (error) {
+    console.log(error);
+    res.render("home", { BoardList: [] });
   }
-  res.render("home");
 };
 
 export const detailController = async (req, res) => {
   const {
     query: { id },
   } = req;
+
+  const mode = process.env.NODE_ENV;
+
+  let IS_DEV = false;
+
+  if (mode === "develop") IS_DEV = true;
+
   try {
     const result = await Board.findOne({ _id: id });
 
-    res.render("detail", { data: result });
+    res.render("detail", { data: result, dev: IS_DEV });
+    console.log(result);
   } catch (e) {
     console.log(e);
     homeController(req, res);
   }
-
-  res.render("detail");
 };
 
 export const createController = (req, res) => {
@@ -39,9 +46,9 @@ export const createBoardController = async (req, res) => {
 
   try {
     const D = new Date();
-    const year = D.getFullYear();
+    let year = D.getFullYear();
     let month = D.getMonth() + 1;
-    let date = D.getDate();
+    let date = D.getUTCDate();
 
     month = month < 10 ? `0${month}` : month;
     date = date < 10 ? `0${date}` : date;
@@ -54,14 +61,61 @@ export const createBoardController = async (req, res) => {
       author: author,
       created: resultDate,
     });
-
     homeController(req, res);
+  } catch (error) {
+    console.log(error);
+    homeController(req, res);
+  }
+};
+
+export const editController = async (req, res) => {
+  const {
+    query: { id },
+  } = req;
+
+  try {
+    const result = await Board.findOne({ _id: id });
+
+    res.render("edit", { data: result });
   } catch (e) {
     console.log(e);
     homeController(req, res);
   }
 };
 
-export const editController = (req, res) => {
-  res.render("edit");
+export const deleteBoardController = async (req, res) => {
+  const {
+    body: { id },
+  } = req;
+
+  try {
+    const result = await Board.deleteOne({ _id: id });
+    homeController(req, res);
+  } catch (e) {
+    console.log(error);
+    homeController(req, res);
+  }
+};
+
+export const editBoardController = async (req, res) => {
+  const {
+    body: { id, title, desc, author },
+  } = req;
+
+  try {
+    const result = await Board.updateOne(
+      { _id: id },
+      {
+        $set: {
+          title: title,
+          description: desc,
+          author: author,
+        },
+      }
+    );
+    homeController(req, res);
+  } catch (e) {
+    console.log(error);
+    homeController(req, res);
+  }
 };

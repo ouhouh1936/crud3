@@ -1616,6 +1616,11 @@
   dependencies:
     "is-obj" "^2.0.0"
 
+"dotenv@^9.0.0":
+  "integrity" "sha512-yy3x9XjojW8ROTBePD25AcMoHqGHsvHmtfw8QWlpEXyMMXXPj6brUA464AptUvHuTPRmNz6Sd3ZLNLeJl6dHJA=="
+  "resolved" "https://registry.npmjs.org/dotenv/-/dotenv-9.0.0.tgz"
+  "version" "9.0.0"
+
 "duplexer3@^0.1.4":
   "integrity" "sha1-7gHdHKwO08vH/b6jfcCo8c4ALOI="
   "resolved" "https://registry.npmjs.org/duplexer3/-/duplexer3-0.1.4.tgz"
